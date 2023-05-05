@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+.logo {
+  height: 40vmin;
+  pointer-events: none;
+  margin: 0;
+}
+
+.Container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #1b1c1e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.text-headline {
+  margin: 0;
+  font-size: 24px;
+  color: #f3f3f3;
+  text-align: center;
+}
+.text-headline span {
+  color: #9061ff;
+}
+.text-paragraf {
+  font-size: 16px;
+  margin-top: 4px;
+  color: #858687;
+}
+.portfolio-link {
+  color: #9061ff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 16px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .logo {
+    animation: App-logo-translate infinite 2s linear;
+  }
+}
+
+@keyframes App-logo-translate {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(16px, -16px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
