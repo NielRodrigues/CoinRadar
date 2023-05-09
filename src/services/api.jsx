@@ -1,7 +1,10 @@
-import axios from 'axios'
+export async function getConverter(convert) {
 
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL,
-})
+  const URL = `https://economia.awesomeapi.com.br/last/${convert}`
 
-export default api
+  const response = await fetch(URL)
+  const data = await response.json()
+  console.log('Oi')
+  console.log(data)
+  return data
+}
