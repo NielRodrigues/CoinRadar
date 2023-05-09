@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container, Currency, CurrencyAndPct, CurrencyValue, LastUpdate, Pct, PctAndInfo, PrefixCurrency, Text, Value, DateUpdate } from "./style";
 
@@ -6,29 +6,44 @@ import { ReactComponent as ClockIcon} from "../../assets/images/clock.svg";
 
 function Convert({ data }){
 
-  console.log('Testando... ')
-  console.log(data)
+  const date = new Date();
+  const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+  const [value, setValue] = useState(1);
+
+
   return (
     <Container>
       <LastUpdate>
         <ClockIcon />
-        <DateUpdate>Última Atualização: 9 de Maio | 15:36</DateUpdate>
+        <DateUpdate>Última Atualização: {date.getDate(data.create_date)} de {months[date.getMonth(data.create_date)]} | {date.getHours(data.create_date)}:{date.getMinutes(data.create_date)}</DateUpdate>
       </LastUpdate>
       <CurrencyAndPct>
         <Currency>
-          <PrefixCurrency>{data.USDBRL.code}</PrefixCurrency>
-          <CurrencyValue type='number' min={1} />
+          <PrefixCurrency>{data.code}</PrefixCurrency>
+          <CurrencyValue value={value} type='number' min={1} onChange={(event) => setValue(event.target.value)} />
         </Currency>
       </CurrencyAndPct>
 
-      <PctAndInfo>
-        <Pct className='loss'>{data.USDBRL.pctChange}%</Pct>
-        <Pct className='loss'>{data.USDBRL.varBid} Hoje</Pct>
-      </PctAndInfo>
+      {
+        data.pctChange >= 0 ?
+        (
+          <PctAndInfo>
+            <Pct className='earn'>+{data.pctChange}%</Pct>
+            <Pct className='earn'>+{data.varBid} Hoje</Pct>
+          </PctAndInfo>
+        )
+        :
+        (
+          <PctAndInfo>
+            <Pct className='loss'>{data.pctChange}%</Pct>
+            <Pct className='loss'>{data.varBid} Hoje</Pct>
+          </PctAndInfo>
+        )
+      }
 
-      <Text>{data.USDBRL.name.split("/")[0]} equivale a:</Text>
+      <Text>{data.name.split("/")[0]} equivale a:</Text>
 
-      <Value>BRL 4.98</Value>
+      <Value>BRL {(Number(data.bid) * value).toFixed(2)}</Value>
 
       <Button type='button'>Converter</Button>
     </Container>
@@ -37,12 +52,12 @@ function Convert({ data }){
 
 Convert.propTypes = {
   data: PropTypes.shape({
-    USDBRL: PropTypes.shape({
-      code: PropTypes.string.isRequired,
-      pctChange: PropTypes.string.isRequired,
-      varBid: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
+    code: PropTypes.string.isRequired,
+    pctChange: PropTypes.string.isRequired,
+    varBid: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    bid: PropTypes.string.isRequired,
+    create_date: PropTypes.string.isRequired,
   }).isRequired,
 };
 
