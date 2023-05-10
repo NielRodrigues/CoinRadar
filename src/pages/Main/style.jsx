@@ -12,3 +12,11 @@ export const Container = styled.div`
   justify-content: flex-start;
   margin: auto;
 `;
+
+export const Title = styled.h1`
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 48px;
+  color: #ee3535;
+  text-align: center;
+`;

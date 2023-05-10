@@ -1,12 +1,14 @@
+/* eslint-disable no-unused-expressions */
 import React, {useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
-import { Container } from "./style";
+import { Container, Title } from "./style";
+
 
 import Header from '../../components/Header';
 import Options from '../../components/Options';
 import Convert from '../../components/Convert';
 
-import { getConverterUSDBRL, getConverterEURBRL, getConverterBTCBRL } from '../../services/api';
+import { getConverter } from '../../services/api';
 
 function Main(){
 
@@ -14,6 +16,7 @@ function Main(){
 
   const [data, setData] = useState()
   const [load, setLoad] = useState(false)
+  const [errorCode, setErrorCode] = useState(false)
 
   useEffect(() => {
     async function getData() {
@@ -22,26 +25,14 @@ function Main(){
       const URL = window.location.href.split("?")
       console.log(">>> Aqui", URL[1])
 
-      if (URL[1] === "USD-BRL"){
-        console.log('Chamou USD')
-        const response = await getConverterUSDBRL();
-        setData(response);
-        setLoad(true)
-      }
 
-      if (URL[1] === "EUR-BRL"){
-        console.log("É euro")
-        const response = await getConverterEURBRL();
-        setData(response);
-        setLoad(true)
-      }
 
-      if (URL[1] === "BTC-BRL"){
-        console.log("Bitcoin")
-        const response = await getConverterBTCBRL();
-        setData(response);
-        setLoad(true)
-      }
+      const response = await getConverter(URL[1]);
+      setData(response);
+
+      response.code === "CoinNotExists" ? setErrorCode(true) : setErrorCode(false)
+
+      setLoad(true)
     }
     getData();
   }, [location])
@@ -52,6 +43,16 @@ function Main(){
         <Header />
         <Options />
         Carregando...
+      </Container>
+    )
+  }
+
+  if(errorCode){
+    return(
+      <Container>
+        <Header />
+        <Options />
+        <Title>Não foi possível fazer a conversão dessas moedas.</Title>
       </Container>
     )
   }
